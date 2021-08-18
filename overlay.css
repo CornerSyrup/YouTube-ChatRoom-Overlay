@@ -1,0 +1,10 @@
+ytd-live-chat-frame#chat {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    border-width: 0;
+    width: 30vw;
+    min-height: 0 !important;
+    opacity: 75%;
+}

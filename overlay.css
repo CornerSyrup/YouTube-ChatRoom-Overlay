@@ -3,8 +3,8 @@ ytd-live-chat-frame#chat {
     top: 0;
     left: 0;
     z-index: 1;
-    padding: 7vh 0 8vh;
+    border-width: 0;
     width: 30vw;
-    height: 100vh !important;
+    min-height: 0 !important;
     opacity: 75%;
 }

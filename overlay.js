@@ -17,14 +17,14 @@ function overlay() {
     videoFrame.parentElement.appendChild(chatRoom);
 
     resizeChatRoom(videoFrame);
+    new ResizeObserver(resizeChatRoom).observe(videoFrame);
 }
 
 function resizeChatRoom(frame) {
-    console.log("[YTCO] Start of resize...");
-
     chatRoom.style.padding = isFullScreen() ? "7vh 0 8vh" : "0";
-
-    console.log("[YTCO] End of resize...");
+    let v = isFullScreen() ? "100vh" : `${videoHeight()}px`;
+    chatRoom.style.height = v;
+    debugLog(v, chatRoom.style.height);
 }
 
 isFullScreen = () => window.screen.height <= videoHeight();
@@ -35,3 +35,7 @@ videoHeight = () =>
     );
 
 setTimeout(overlay, 1 * 1000);
+
+function debugLog(...values) {
+    console.log(`[YTCO] ${values}`);
+}

@@ -2,29 +2,39 @@ let videoFrame;
 let chatRoom;
 
 function overlay() {
-    videoFrame = document.querySelector("video.video-stream.html5-main-video");
-    chatRoom = document.querySelector("ytd-live-chat-frame#chat");
+    videoFrame = getVideoFrame();
+    chatRoom = getChatRoom();
 
     if (videoFrame == null) {
-        console.warn("[YT Chat Overlay] Video container not found...");
+        warnNoVideoFrame();
         return;
     } else if (chatRoom == null) {
-        console.warn("[YT Chat Overlay] Chat room not found...");
+        warnNoChatRoom();
         return;
     }
 
-    console.info("[YT Chat Overlay] Chat room has been overlay to video.");
     videoFrame.parentElement.appendChild(chatRoom);
-
-    resizeChatRoom(videoFrame);
-    new ResizeObserver(resizeChatRoom).observe(videoFrame);
 }
 
 function resizeChatRoom(frame) {
+    // Resize window might cause webpage re-render.
+    // Then need to overlay again
+    overlay();
+
     chatRoom.style.padding = isFullScreen() ? "7vh 0 8vh" : "0";
     chatRoom.style.height = isFullHeight() ? "100vh" : `${videoHeight()}px`;
     chatRoom.style.width = isFullWidth() ? "30vw" : "40%";
 }
+
+getVideoFrame = () =>
+    document.querySelector("video.video-stream.html5-main-video");
+
+getChatRoom = () => document.querySelector("ytd-live-chat-frame#chat");
+
+warnNoVideoFrame = () =>
+    console.warn("[YT Chat Overlay] Video container not found...");
+
+warnNoChatRoom = () => console.warn("[YT Chat Overlay] Chat room not found...");
 
 isFullScreen = () => isFullWidth() && isFullHeight();
 
@@ -44,7 +54,12 @@ videoWidth = () =>
             .getPropertyValue("width")
     );
 
-setTimeout(overlay, 1 * 1000);
+setTimeout(() => {
+    overlay();
+    // monitor
+    new ResizeObserver(resizeChatRoom).observe(videoFrame);
+    console.info("[YT Chat Overlay] Chat room has been overlay to video.");
+}, 1 * 1000);
 
 function debugLog(...values) {
     console.log(`[YTCO] ${values}`);

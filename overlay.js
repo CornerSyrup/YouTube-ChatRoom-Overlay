@@ -22,16 +22,26 @@ function overlay() {
 
 function resizeChatRoom(frame) {
     chatRoom.style.padding = isFullScreen() ? "7vh 0 8vh" : "0";
-    let v = isFullScreen() ? "100vh" : `${videoHeight()}px`;
-    chatRoom.style.height = v;
-    debugLog(v, chatRoom.style.height);
+    chatRoom.style.height = isFullHeight() ? "100vh" : `${videoHeight()}px`;
+    chatRoom.style.width = isFullWidth() ? "30vw" : "40%";
 }
 
-isFullScreen = () => window.screen.height <= videoHeight();
+isFullScreen = () => isFullWidth() && isFullHeight();
+
+isFullHeight = () => window.screen.height <= videoHeight();
+
+isFullWidth = () => window.screen.width <= videoWidth();
 
 videoHeight = () =>
     Number.parseInt(
         window.getComputedStyle(videoFrame, null).getPropertyValue("height")
+    );
+
+videoWidth = () =>
+    Number.parseInt(
+        window
+            .getComputedStyle(videoFrame.parentElement, null)
+            .getPropertyValue("width")
     );
 
 setTimeout(overlay, 1 * 1000);

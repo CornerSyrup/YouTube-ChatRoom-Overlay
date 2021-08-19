@@ -1,4 +1,4 @@
-const settings = ["width", "height", "align", "float", "opacity", "comment"];
+const settings = ["width", "height", "float", "opacity", "comment"];
 
 chrome.storage.local.get(settings, (values) => {
     settings.forEach((setting) => {
@@ -16,12 +16,6 @@ document.getElementById("width")!.addEventListener("change", (ev) =>
 document.getElementById("height")!.addEventListener("change", (ev) =>
     chrome.storage.local.set({
         height: (ev.target! as HTMLInputElement).value,
-    })
-);
-
-document.getElementById("align")!.addEventListener("change", (ev) =>
-    chrome.storage.local.set({
-        align: (ev.target! as HTMLInputElement).value,
     })
 );
 

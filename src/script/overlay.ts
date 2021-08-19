@@ -16,37 +16,67 @@ function overlay() {
     videoFrame.parentElement!.appendChild(chatRoom);
 }
 
+//#region Getter/Setters
+/**
+ * Gets the steam video element.
+ * @returns Video element of steam.
+ */
 const getVideoFrame = () =>
     document.querySelector(
         "video.video-stream.html5-main-video"
     )! as HTMLVideoElement;
 
+/**
+ * Gets the chat room element.
+ * @returns Chat room element.
+ */
 const getChatRoom = () =>
     document.querySelector("ytd-live-chat-frame#chat")! as HTMLElement;
 
-const warnNoVideoFrame = () =>
-    console.warn("[YT Chat Overlay] Video container not found...");
-
-const warnNoChatRoom = () =>
-    console.warn("[YT Chat Overlay] Chat room not found...");
-
+/**
+ * Whether it is now in full screen.
+ */
 const isFullScreen = () => isFullWidth() && isFullHeight();
 
+/**
+ * Whether the video element takes the full height of screen.
+ */
 const isFullHeight = () => window.screen.height <= videoHeight();
 
+/**
+ * Whether the video element takes the full width of screen.
+ */
 const isFullWidth = () => window.screen.width <= videoWidth();
 
+/**
+ * Gets the current height of video element.
+ * @returns Current height of video element.
+ */
 const videoHeight = () =>
     Number.parseInt(
         window.getComputedStyle(videoFrame, null).getPropertyValue("height")
     );
 
+/**
+ * Gets the current width of video element.
+ * @returns Current width of video element.
+ */
 const videoWidth = () =>
     Number.parseInt(
         window
             .getComputedStyle(videoFrame.parentElement!, null)
             .getPropertyValue("width")
     );
+//#endregion
+
+//#region Helper functions
+const warnNoVideoFrame = () =>
+    console.warn("[YT Chat Overlay] Video container not found...");
+
+const warnNoChatRoom = () =>
+    console.warn("[YT Chat Overlay] Chat room not found...");
+//#endregion
+
 
 setTimeout(() => {
     overlay();

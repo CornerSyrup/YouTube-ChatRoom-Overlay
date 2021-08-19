@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <script src="popup.js"></script>
+</head>
+
+<body>
+    <main>
+        <form>
+            <label for="width">
+                <span class="label">Width:</span>
+                <input type="range" id="width" min="0" max="100" value="30" />
+            </label>
+            <label for="height">
+                <span class="label">Height:</span>
+                <input type="range" id="height" min="0" max="100" value="100" />
+            </label>
+            <label for="align">
+                <span class="label">Align:</span>
+                <input type="range" id="align" min="0" max="100" step="50" />
+            </label>
+            <label for="float">
+                <span class="label">Float:</span>
+                <input type="range" id="float" min="0" max="100" step="50" />
+            </label>
+            <label for="opacity">
+                <span class="label">Opacity:</span>
+                <input type="range" id="opacity" min="0" max="100" value="40" />
+            </label>
+            <label for="comment">
+                <span class="label">Comment Style:</span>
+                <textarea id="comment" cols="30" rows="10"></textarea>
+            </label>
+            <input type="reset" value="Default">
+        </form>
+    </main>
+</body>
+
+</html>

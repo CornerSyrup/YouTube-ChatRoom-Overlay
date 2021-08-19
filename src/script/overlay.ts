@@ -55,7 +55,7 @@ const isFullHeight = () => window.screen.height <= videoHeight();
 /**
  * Whether the video element takes the full width of screen.
  */
-const isFullWidth = () => window.screen.width <= videoWidth();
+const isFullWidth = () => window.screen.width <= videoContainerWidth();
 
 /**
  * Gets the current height of video element.
@@ -71,6 +71,11 @@ const videoHeight = () =>
  * @returns Current width of video element.
  */
 const videoWidth = () =>
+    Number.parseInt(
+        window.getComputedStyle(videoFrame).getPropertyValue("width")
+    );
+
+const videoContainerWidth = () =>
     Number.parseInt(
         window
             .getComputedStyle(videoFrame.parentElement!)
@@ -109,8 +114,13 @@ const setChatPadding = (value?: string) =>
  * @param value Width of chat room, in percent.
  * @returns
  */
-const setChatWidth = (value: number) =>
-    (chatRoom.style.width = isFullWidth() ? `${value}vw` : `${value}%`);
+const setChatWidth = (value: number) => {
+    let w = (videoWidth() * value) / 100;
+    chatRoom.style.width = `${w}px`;
+    chrome.storage.local.get("float", (item) => {
+        setChatFloat(item["float"], w);
+    });
+};
 
 /**
  * Sets the height of the chat room.
@@ -125,14 +135,10 @@ const setChatHeight = (value: number) =>
  * Sets the float for the chat room.
  * @param value Horizontal float of chat room, in percent to left.
  */
-const setChatFloat = (value: number) => {
-    setTimeout(
-        () =>
-            (chatRoom.style.left = `${
-                (videoWidth() - chatWidth()) * (value / 100)
-            }px`),
-        250
-    );
+const setChatFloat = (value: number, width?: number) => {
+    chatRoom.style.left = `${
+        (videoWidth() - (width ?? chatWidth())) * (value / 100)
+    }px`;
 };
 
 /**

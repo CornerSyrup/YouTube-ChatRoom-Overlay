@@ -73,8 +73,17 @@ const videoHeight = () =>
 const videoWidth = () =>
     Number.parseInt(
         window
-            .getComputedStyle(videoFrame.parentElement!, null)
+            .getComputedStyle(videoFrame.parentElement!)
             .getPropertyValue("width")
+    );
+
+/**
+ * Gets the current width of chat room.
+ * @returns Current width of chat room.
+ */
+const chatWidth = () =>
+    Number.parseInt(
+        window.getComputedStyle(chatRoom).getPropertyValue("width")
     );
 //#endregion
 
@@ -92,18 +101,98 @@ const warnNoChatRoom = () =>
     console.warn("[YT Chat Overlay] Chat room not found...");
 //#endregion
 
+//#region Resizer
+const setChatPadding = (value?: string) =>
+    (chatRoom.style.padding = isFullScreen() ? "7vh 0 8vh" : "0");
+/**
+ * Sets the width of the chat room.
+ * @param value Width of chat room, in percent.
+ * @returns
+ */
+const setChatWidth = (value: number) =>
+    (chatRoom.style.width = isFullWidth() ? `${value}vw` : `${value}%`);
 
+/**
+ * Sets the height of the chat room.
+ * @param value Height of chat room, in percent.
+ */
+const setChatHeight = (value: number) =>
+    (chatRoom.style.height = isFullHeight()
+        ? `${value}vh`
+        : `${videoHeight()}px`);
+
+/**
+ * Sets the float for the chat room.
+ * @param value Horizontal float of chat room, in percent to left.
+ */
+const setChatFloat = (value: number) => {
+    setTimeout(
+        () =>
+            (chatRoom.style.left = `${
+                (videoWidth() - chatWidth()) * (value / 100)
+            }px`),
+        250
+    );
+};
+
+/**
+ * Sets the opacity for the chat room.
+ * @param value Opacity of chat room, in percent.
+ */
+const setChatOpacity = (value: number) =>
+    (chatRoom.style.opacity = `${value / 100}`);
+
+/**
+ * Sets the chat comments' style.
+ * @param value CSS style code for chat room comments.
+ */
+const setChatStyle = (value: string) => {};
+
+/**
+ * Resize handler map.
+ */
+const resizers: { [setting: string]: (value: any) => void } = {
+    width: setChatWidth,
+    height: setChatHeight,
+    float: setChatFloat,
+    opacity: setChatOpacity,
+    comment: setChatStyle,
+};
+//#endregion
+
+// YT render takes time, wait patiently
 setTimeout(() => {
     overlay();
-    // monitor
+
+    chrome.storage.local.get(null, (items) => {
+        Object.getOwnPropertyNames(items).forEach((prop) => {
+            if (resizers[prop]) resizers[prop](items[prop]);
+        });
+    });
+
+    // video size change monitor
     new ResizeObserver((entries, observer) => {
         // Resize window might cause webpage re-render.
         // Then need to overlay again
         overlay();
 
-        chatRoom.style.padding = isFullScreen() ? "7vh 0 8vh" : "0";
-        chatRoom.style.height = isFullHeight() ? "100vh" : `${videoHeight()}px`;
-        chatRoom.style.width = isFullWidth() ? "30vw" : "40%";
+        chrome.storage.local.get(["width", "height"], (items) => {
+            setChatPadding();
+            setChatWidth(items["width"]);
+            setChatHeight(items["height"]);
+        });
     }).observe(videoFrame);
+
+    // setting change monitor
+    chrome.storage.onChanged.addListener((changes, area) => {
+        if (area != "local") {
+            return;
+        }
+
+        Object.getOwnPropertyNames(changes).forEach((prop) =>
+            resizers[prop](changes[prop].newValue)
+        );
+    });
+
     console.info("[YT Chat Overlay] Chat room has been overlay to video.");
 }, 1 * 1000);

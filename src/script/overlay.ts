@@ -1,6 +1,15 @@
+/**
+ * Steam video element.
+ */
 let videoFrame: HTMLVideoElement;
+/**
+ * Chat room custom element.
+ */
 let chatRoom: HTMLElement;
 
+/**
+ * Overlay the chat room onto video element.
+ */
 function overlay() {
     videoFrame = getVideoFrame();
     chatRoom = getChatRoom();
@@ -70,9 +79,15 @@ const videoWidth = () =>
 //#endregion
 
 //#region Helper functions
+/**
+ * Warn that video element not found. Potentially DOM structure changed.
+ */
 const warnNoVideoFrame = () =>
     console.warn("[YT Chat Overlay] Video container not found...");
 
+/**
+ * Warn that chat room not found. Potentially DOM structure changed.
+ */
 const warnNoChatRoom = () =>
     console.warn("[YT Chat Overlay] Chat room not found...");
 //#endregion

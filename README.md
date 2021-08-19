@@ -10,6 +10,10 @@ Overlay chat room in YouTube when video is playing in Cinema mode or Full screen
     -   opacity
 -   Apply to live stream, premiere and live chat replay.
 
+## License
+
+Icons made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/)
+
 ## History
 
 ### v0.1

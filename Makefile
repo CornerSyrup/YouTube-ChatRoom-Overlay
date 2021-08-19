@@ -1,4 +1,10 @@
 all: build
 
-build:
-	7z a build/ytco.zip manifest.json image/ *.js *.css *.html
+build: script style
+	7z a out.zip ./dist/*
+
+script:
+	tsc
+
+style:
+	lessc src/style/overlay.less dist/overlay.css

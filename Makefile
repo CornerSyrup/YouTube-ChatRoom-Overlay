@@ -8,3 +8,4 @@ script:
 
 style:
 	lessc src/style/overlay.less dist/overlay.css
+	lessc src/style/popup.less dist/popup.css

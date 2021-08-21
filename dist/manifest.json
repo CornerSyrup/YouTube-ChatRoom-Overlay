@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "version": "0.2.17",
+    "version": "0.3.30.6",
     "name": "YouTube Chat Room Overlay",
     "description": "Overlay chat room in YouTube when video is playing in Normal mode, Cinema mode or Full screen.",
 
@@ -27,5 +27,6 @@
             "js": ["overlay.js"],
             "css": ["overlay.css"]
         }
-    ]
+    ],
+    "permissions": ["storage"]
 }
